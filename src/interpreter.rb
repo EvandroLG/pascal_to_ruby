@@ -1,5 +1,15 @@
 require './token'
 
+class String
+  def is_number?
+    self.match(/^(\d)+$/)
+  end
+
+  def is_space?
+    self.match(/^\s*$/)
+  end
+end
+
 INTEGER, PLUS, MINUS, EOF = 'INTEGER', 'PLUS', 'MINUS', 'EOF'
 
 class Interpreter
@@ -24,34 +34,47 @@ class Interpreter
   end
 
   def skip_whitespace
-    while @current_char and @current_char.match(/^(\d)+$/)
+    while @current_char and @current_char.is_number?
       advance
     end
   end
 
   def integer
+    result = ''
+
+    while @current_char and @current_char.is_number?
+      result += @current_char
+      advance
+    end
+
+    result.to_i
   end
 
   def get_next_token
-    if @pos > @text.length - 1
-      return Token.new(EOF, nil)
+    while @current_char
+      if @current_char.is_space?
+        skipe_whitespace
+        continue
+      end
+
+      if @current_char.is_number?
+        return Token.new(INTEGER, integer)
+      end
+
+      if @current_char == '+'
+        advance
+        return Token.new(PLUS, '+')
+      end
+
+      if @current_char == '-'
+        advance
+        return Token.new(MINUS, '-')
+      end
+
+      error
     end
 
-    current_char = @text[@pos]
-
-    if current_char.match(/^(\d)+$/)
-      token = Token.new(INTEGER, current_char.to_i)
-      @pos += 1
-      return token
-    end
-
-    if current_char == '+'
-      token = Token.new(PLUS, current_char)
-      @pos += 1
-      return token
-    end
-
-    error
+    Token.new(EOF, nil)
   end
 
   def eat(token_type)
@@ -69,11 +92,20 @@ class Interpreter
     left = @current_token
     eat(INTEGER)
 
-    eat(PLUS)
+    op = @current_token
+    if op == PLUS
+      eat(PLUS)
+    else
+      eat(MINUS)
+    end
 
     right = @current_token
     eat(INTEGER)
 
-    left.value + right.value
+    if op.type == PLUS
+      return left.value + right.value
+    end
+
+    left.value - right.value
   end
 end
