@@ -50,7 +50,6 @@ class Interpreter
     left = @current_token
     eat(INTEGER)
 
-    op = @current_token
     eat(PLUS)
 
     right = @current_token
