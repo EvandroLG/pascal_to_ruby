@@ -14,19 +14,19 @@ class Interpreter
   end
 
   def get_next_token()
-    if @pos > @text.length - 1 then
+    if @pos > @text.length - 1
       return Token.new(EOF, nil)
     end
 
     current_char = @text[@pos]
 
-    if current_char.match(/^(\d)+$/) then
+    if current_char.match(/^(\d)+$/)
       token = Token.new(INTEGER, current_char.to_i)
       @pos += 1
       return token
     end
 
-    if current_char == '+' then
+    if current_char == '+'
       token = Token.new(PLUS, current_char)
       @pos += 1
       return token
@@ -37,7 +37,7 @@ class Interpreter
 
   def eat(token_type)
     if @current_token.type == token_type then
-      @current_token == get_next_token()
+      @current_token = get_next_token()
       return
     end
 
@@ -48,9 +48,9 @@ class Interpreter
     @current_token = get_next_token
 
     left = @current_token
-    eat(PLUS)
+    eat(INTEGER)
 
-    right = @current_token
+    op = @current_token
     eat(PLUS)
 
     right = @current_token
