@@ -1,6 +1,6 @@
 require './token'
 
-INTEGER, PLUS, EOF = 'INTEGER', 'PLUS', 'EOF'
+INTEGER, PLUS, MINUS, EOF = 'INTEGER', 'PLUS', 'MINUS', 'EOF'
 
 class Interpreter
   def initialize(text)
@@ -9,11 +9,30 @@ class Interpreter
     @current_token = nil
   end
 
-  def error()
+  def error
     raise 'Error parsing input'
   end
 
-  def get_next_token()
+  def advance
+    @pos += 1
+
+    if @pos > @text.length - 1
+      @current_char = @text[@pos]
+    else
+      @current_char = @text[@pos]
+    end
+  end
+
+  def skip_whitespace
+    while @current_char and @current_char.match(/^(\d)+$/)
+      advance
+    end
+  end
+
+  def integer
+  end
+
+  def get_next_token
     if @pos > @text.length - 1
       return Token.new(EOF, nil)
     end
