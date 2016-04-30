@@ -17,6 +17,7 @@ class Interpreter
     @text = text
     @pos = 0
     @current_token = nil
+    @current_char = @text[@pos]
   end
 
   def error
@@ -27,7 +28,7 @@ class Interpreter
     @pos += 1
 
     if @pos > @text.length - 1
-      @current_char = @text[@pos]
+      @current_char = nil
     else
       @current_char = @text[@pos]
     end
@@ -54,7 +55,7 @@ class Interpreter
     while @current_char
       if @current_char.is_space?
         skipe_whitespace
-        continue
+        next
       end
 
       if @current_char.is_number?
@@ -93,7 +94,7 @@ class Interpreter
     eat(INTEGER)
 
     op = @current_token
-    if op == PLUS
+    if op.type == PLUS
       eat(PLUS)
     else
       eat(MINUS)
