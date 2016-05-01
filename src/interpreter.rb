@@ -87,26 +87,29 @@ class Interpreter
     error
   end
 
+  def term
+    token = @current_token
+    eat(INTEGER)
+
+    token.value
+  end
+
   def expr
     @current_token = get_next_token
+    result = term
 
-    left = @current_token
-    eat(INTEGER)
+    while [PLUS, MINUS].include? @current_token.type
+      token = @current_token
 
-    op = @current_token
-    if op.type == PLUS
-      eat(PLUS)
-    else
-      eat(MINUS)
+      if token.type == PLUS
+        eat(PLUS)
+        result = result + term
+      elsif  token.type == MINUS
+        eat(MINUS)
+        result = result - term
+      end
     end
 
-    right = @current_token
-    eat(INTEGER)
-
-    if op.type == PLUS
-      return left.value + right.value
-    end
-
-    left.value - right.value
+    result
   end
 end
