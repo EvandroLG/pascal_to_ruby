@@ -35,7 +35,7 @@ class Interpreter
   end
 
   def skip_whitespace
-    while @current_char and @current_char.is_number?
+    while @current_char and @current_char.is_space?
       advance
     end
   end
@@ -54,7 +54,7 @@ class Interpreter
   def get_next_token
     while @current_char
       if @current_char.is_space?
-        skipe_whitespace
+        skip_whitespace
         next
       end
 
@@ -80,7 +80,7 @@ class Interpreter
 
   def eat(token_type)
     if @current_token.type == token_type then
-      @current_token = get_next_token()
+      @current_token = get_next_token
       return
     end
 
