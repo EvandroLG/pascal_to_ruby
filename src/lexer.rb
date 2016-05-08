@@ -10,7 +10,7 @@ class String
   end
 end
 
-INTEGER, MUL, DIV, EOF = 'INTEGER', 'MUL', 'DIV', 'EOF'
+INTEGER, PLUS, MINUS, MUL, DIV, EOF = 'INTEGER', 'PLUS', 'MINUS', 'MUL', 'DIV', 'EOF'
 
 class Lexer
   def initialize(text)
@@ -61,6 +61,16 @@ class Lexer
         return Token.new(INTEGER, integer)
       end
 
+      if @current_char == '+'
+        advance
+        return Token.new(PLUS, '+')
+      end
+
+      if @current_char == '-'
+        advance
+        return Token.new(MINUS, '-')
+      end
+
       if @current_char == '*'
         advance
         return Token.new(MUL, '*')
@@ -75,14 +85,5 @@ class Lexer
     end
 
     Token.new(EOF, nil)
-  end
-
-  def eat(token_type)
-    if @current_token.type == token_type then
-      @current_token = get_next_token
-      return
-    end
-
-    error
   end
 end

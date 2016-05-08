@@ -22,10 +22,10 @@ class Interpreter
     token.value
   end
 
-  def expr
+  def term
     result = factor
 
-    while [MUL, DIV].include? @current_token.type
+    while [MUL, DIV].include? @current_token.type do
       token = @current_token
 
       if token.type == MUL
@@ -34,6 +34,24 @@ class Interpreter
       else
         eat(DIV)
         result = result / factor
+      end
+    end
+
+    result
+  end
+
+  def expr
+    result = term
+
+    while [PLUS, MINUS].include? @current_token.type
+      token = @current_token
+
+      if token.type == PLUS
+        eat(PLUS)
+        result = result + term
+      else
+        eat(MINUS)
+        result = result - term
       end
     end
 
