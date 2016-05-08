@@ -18,8 +18,16 @@ class Interpreter
 
   def factor
     token = @current_token
-    eat(INTEGER)
-    token.value
+
+    if token.type == INTEGER
+      eat(INTEGER)
+      token.value
+    elsif token.type == INTEGER
+      eat(LPAREN)
+      result = expr
+      eat(RPAREN)
+      result
+    end
   end
 
   def term

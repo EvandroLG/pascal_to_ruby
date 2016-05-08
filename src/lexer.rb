@@ -10,7 +10,7 @@ class String
   end
 end
 
-INTEGER, PLUS, MINUS, MUL, DIV, EOF = 'INTEGER', 'PLUS', 'MINUS', 'MUL', 'DIV', 'EOF'
+INTEGER, PLUS, MINUS, MUL, LPAREN, RPAREN, DIV, EOF = 'INTEGER', 'PLUS', 'MINUS', 'MUL', 'DIV', '(', ')', 'EOF'
 
 class Lexer
   def initialize(text)
@@ -79,6 +79,16 @@ class Lexer
       if @current_char == '/'
         advance
         return Token.new(DIV, '/')
+      end
+
+      if @current_char == '('
+        advance
+        return Token.new(LPAREN, '(')
+      end
+
+      if @current_char == ')'
+        advance
+        return Token.new(RPAREN, ')')
       end
 
       error
