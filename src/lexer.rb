@@ -2,11 +2,11 @@ require_relative 'token'
 
 class String
   def is_number?
-    self.match(/^(\d)+$/)
+    !!self.match(/^(\d)+$/)
   end
 
   def is_space?
-    self.match(/^\s*$/)
+    !!self.match(/^\s*$/)
   end
 end
 
