@@ -10,31 +10,26 @@ class TestInterpreter < Test::Unit::TestCase
     assert_raise(RuntimeError, 'Invalid syntax') { interpreter.error } 
   end
 
-  def test_result_with_sum
-    lexer = Lexer.new '2+2'
+  def verify_calc(param, expected)
+    lexer = Lexer.new param
     interpreter = Interpreter.new lexer
 
-    assert_equal(4, interpreter.expr)
+    assert_equal(expected, interpreter.expr)
+  end
+
+  def test_result_with_sum
+    verify_calc('2+2', 4)
   end
 
   def test_result_with_plus
-    lexer = Lexer.new '2-2'
-    interpreter = Interpreter.new lexer
-
-    assert_equal(0, interpreter.expr)
+    verify_calc('2-2', 0)
   end
 
   def test_result_with_mul
-    lexer = Lexer.new '2*3'
-    interpreter = Interpreter.new lexer
-
-    assert_equal(6, interpreter.expr)
+    verify_calc('2*3', 6)
   end
 
   def test_result_with_div
-    lexer = Lexer.new '6/3'
-    interpreter = Interpreter.new lexer
-
-    assert_equal(2, interpreter.expr)
+    verify_calc('6/3', 2)
   end
 end
